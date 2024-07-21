@@ -68,7 +68,6 @@ body {
 .presentacion__contenido__texto {
   font-size: 1.5rem;
   font-family: var(--fuente-monserrat);
-  text-align: justify;
 }
 
 .presentacion__enlaces {
