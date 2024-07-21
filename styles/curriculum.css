@@ -76,8 +76,8 @@ body {
   width: 35%;
   height: 35%;
   transition: width 1s;
-  border-radius: 125px;
-  mask-image: linear-gradient(var(--color-primario) 80%, transparent);
+  border-radius: 100px;
+  mask-image: linear-gradient(var(--color-primario) 50%, transparent);
 }
 .imagen:hover {
   width: 40%;
