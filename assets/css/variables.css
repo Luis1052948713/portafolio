@@ -1,0 +1,32 @@
+/* ================================================================
+   VARIABLES DEL DISEÑO
+   Cambia aquí los colores principales de todo el sitio.
+   ================================================================ */
+:root {
+  --color-principal: #7c5cff;
+  --color-principal-claro: #9d86ff;
+  --color-secundario: #2dd4bf;
+  --fondo: #090d16;
+  --fondo-elevado: #101827;
+  --fondo-suave: #0d1320;
+  --texto: #f7f8fb;
+  --texto-secundario: #a9b3c7;
+  --borde: #273248;
+  --peligro: #fb7185;
+  --sombra: 0 24px 70px rgba(0, 0, 0, 0.28);
+  --radio-grande: 28px;
+  --radio-medio: 18px;
+  --ancho-maximo: 1180px;
+  --fuente-texto: "Inter", sans-serif;
+  --fuente-titulo: "Manrope", sans-serif;
+}
+
+[data-bs-theme="light"] {
+  --fondo: #f6f8fc;
+  --fondo-elevado: #ffffff;
+  --fondo-suave: #eef2f8;
+  --texto: #151a26;
+  --texto-secundario: #5e687c;
+  --borde: #dbe2ed;
+  --sombra: 0 22px 58px rgba(31, 42, 68, 0.12);
+}

@@ -1,0 +1,26 @@
+/* ================================================================
+   VERSIÓN ATS / IMPRESIÓN Y COPIA PARA PDF
+   ================================================================ */
+.copia-pdf { width: 1200px !important; max-width: 1200px !important; margin: 0 !important; overflow: visible !important; background: var(--fondo) !important; }
+.copia-pdf [data-aos] { opacity: 1 !important; visibility: visible !important; transform: none !important; }
+.copia-pdf .seccion { padding-top: 70px !important; padding-bottom: 70px !important; }
+.copia-pdf .hero { min-height: auto !important; padding-top: 55px !important; }
+.copia-pdf .tarjeta,.copia-pdf .tarjeta-proyecto,.copia-pdf .tarjeta-experiencia,.copia-pdf .tarjeta-educacion { break-inside: avoid; page-break-inside: avoid; }
+.copia-pdf .seccion-alternativa { background: #0d1320 !important; }
+
+@media print {
+  @page { size: A4; margin: 12mm; }
+  html,body { background: white !important; color: #111827 !important; font-size: 10pt; }
+  .fondo-ambiental,.barra-navegacion,.acciones-hero,.acciones-secundarias,.formulario-contacto,.boton-subir,.proyecto-acciones { display: none !important; }
+  #documento-cv,.seccion,.seccion-alternativa { background: white !important; color: #111827 !important; }
+  .seccion { padding: 16px 0 !important; border: 0 !important; }
+  .hero { min-height: auto !important; padding-top: 0 !important; }
+  .hero .col-lg-5,.tarjeta-indicador,.proyecto-imagen { display: none !important; }
+  .hero h1 { color: #111827 !important; background: none !important; -webkit-text-fill-color: initial !important; font-size: 31pt !important; }
+  h2,h3,h4,strong,dd { color: #111827 !important; }
+  p,li,small,span,dt { color: #374151 !important; }
+  .tarjeta,.tarjeta-contacto,.tarjeta-proyecto,.tarjeta-experiencia,.tarjeta-educacion { border: 1px solid #d1d5db !important; background: white !important; box-shadow: none !important; break-inside: avoid; }
+  .nube-etiquetas span,.nube-habilidades span { border-color: #d1d5db !important; color: #111827 !important; }
+  a { color: #111827 !important; text-decoration: none !important; }
+  .pie-pagina { display: none; }
+}

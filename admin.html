@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Constructor de portafolio | Luis Barbosa</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/variables.css" />
+  <link rel="stylesheet" href="assets/css/estilos.css" />
+  <link rel="stylesheet" href="assets/css/admin.css" />
+</head>
+<body class="admin-body">
+  <main class="container-fluid admin-contenedor py-4 px-lg-5">
+    <header class="admin-cabecera">
+      <div><span class="subtitulo-tarjeta">Constructor completo</span><h1>Construye tu portafolio</h1><p>Crea un borrador y publícalo cuando esté listo.</p></div>
+      <div class="d-flex flex-wrap gap-2"><a class="btn btn-borde" href="index.html" target="_blank"><i class="fa-solid fa-eye"></i> Ver portafolio</a><button class="btn btn-borde d-none" id="boton-salir" type="button"><i class="fa-solid fa-right-from-bracket"></i> Salir</button></div>
+    </header>
+
+    <div class="alert alert-warning d-none" id="aviso-configuracion" role="alert"><strong>Falta conectar Supabase.</strong> Completa <code>assets/js/datos/supabase-config.js</code>.</div>
+    <div class="alert alert-warning d-none" id="aviso-actualizacion" role="alert"><strong>Falta actualizar Supabase.</strong> Ejecuta <code>supabase/upgrade-constructor.sql</code> en SQL Editor y recarga esta página.</div>
+    <div class="admin-mensaje d-none" id="admin-mensaje" role="status"></div>
+
+    <section class="admin-acceso tarjeta" id="seccion-acceso">
+      <div><span class="icono-tarjeta"><i class="fa-solid fa-lock"></i></span><h2>Iniciar sesión</h2><p>Acceso exclusivo para el administrador.</p></div>
+      <form id="formulario-acceso" class="row g-3">
+        <div class="col-12"><label class="form-label" for="correo-admin">Correo</label><input class="form-control" id="correo-admin" type="email" autocomplete="username" required /></div>
+        <div class="col-12"><label class="form-label" for="clave-admin">Contraseña</label><input class="form-control" id="clave-admin" type="password" autocomplete="current-password" required /></div>
+        <div class="col-12"><button class="btn btn-primary w-100" type="submit"><i class="fa-solid fa-arrow-right-to-bracket"></i> Entrar</button></div>
+      </form>
+    </section>
+
+    <section class="d-none constructor" id="seccion-panel">
+      <aside class="constructor-lateral tarjeta">
+        <div class="constructor-estado"><span id="estado-borrador"><i class="fa-solid fa-circle"></i> Borrador</span><small id="fecha-publicacion">Todavía no publicado</small></div>
+        <nav id="constructor-pasos" aria-label="Pasos del constructor"></nav>
+        <button class="btn btn-borde w-100" id="boton-importar" type="button"><i class="fa-solid fa-file-import"></i> Usar datos actuales</button>
+      </aside>
+
+      <div class="constructor-principal">
+        <form id="formulario-constructor">
+          <section class="tarjeta constructor-editor">
+            <div id="constructor-contenido"></div>
+            <div class="constructor-navegacion">
+              <button class="btn btn-borde" id="boton-anterior" type="button"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+              <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-borde" id="boton-guardar" type="button"><i class="fa-solid fa-cloud-arrow-up"></i> Guardar borrador</button>
+                <button class="btn btn-primary" id="boton-siguiente" type="button">Siguiente <i class="fa-solid fa-arrow-right"></i></button>
+                <button class="btn btn-success d-none" id="boton-publicar" type="submit"><i class="fa-solid fa-wand-magic-sparkles"></i> Generar y publicar todo</button>
+              </div>
+            </div>
+          </section>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/datos/supabase-config.js"></script>
+  <script src="assets/js/datos/portafolio-datos.js"></script>
+  <script src="assets/js/modulos/supabase-publico.js"></script>
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>

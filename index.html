@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="es" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#090d16" />
+    <meta name="color-scheme" content="dark light" />
+
+    <!-- Estos datos se actualizan automáticamente desde portafolio-datos.js -->
+    <title id="titulo-pagina">Luis Barbosa | Software Developer</title>
+    <meta
+      id="meta-descripcion"
+      name="description"
+      content="Portafolio profesional de Luis Barbosa."
+    />
+    <meta
+      id="meta-autor"
+      name="author"
+      content="Luis Fernando Barbosa Orozco"
+    />
+    <meta name="robots" content="index, follow" />
+    <link
+      id="enlace-canonico"
+      rel="canonical"
+      href="https://luis1052948713.github.io/portafolio/"
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_CO" />
+    <meta
+      id="og-titulo"
+      property="og:title"
+      content="Luis Barbosa | Software Developer"
+    />
+    <meta
+      id="og-descripcion"
+      property="og:description"
+      content="Portafolio profesional de Luis Barbosa."
+    />
+    <meta
+      id="og-url"
+      property="og:url"
+      content="https://luis1052948713.github.io/portafolio/"
+    />
+    <meta
+      id="og-imagen"
+      property="og:image"
+      content="assets/img/perfil/luis-barbosa-recorte.png"
+    />
+
+    <link rel="icon" type="image/svg+xml" href="assets/favicon/favicon.svg" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="assets/favicon/favicon-32x32.png"
+    />
+    <link rel="apple-touch-icon" href="assets/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="assets/favicon/site.webmanifest" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Los estilos se separan por responsabilidad. -->
+    <link rel="stylesheet" href="assets/css/variables.css" />
+    <link rel="stylesheet" href="assets/css/estilos.css" />
+    <link rel="stylesheet" href="assets/css/responsive.css" />
+    <link rel="stylesheet" href="assets/css/impresion.css" />
+  </head>
+  <body>
+    <a class="salto-contenido" href="#contenido-principal"
+      >Saltar al contenido principal</a
+    >
+    <div class="fondo-ambiental" aria-hidden="true"></div>
+
+    <nav
+      class="navbar navbar-expand-lg fixed-top barra-navegacion"
+      aria-label="Navegación principal"
+    >
+      <div class="container">
+        <a class="navbar-brand marca-personal" href="#inicio">
+          <span class="marca-iniciales" id="nav-iniciales">LB</span>
+          <span class="marca-textos"
+            ><strong id="nav-nombre">Luis Barbosa</strong
+            ><small id="nav-cargo">Software Developer</small></span
+          >
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#menu-principal"
+          aria-controls="menu-principal"
+          aria-expanded="false"
+          aria-label="Abrir menú"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="menu-principal">
+          <ul class="navbar-nav ms-auto align-items-lg-center">
+            <li class="nav-item">
+              <a class="nav-link active" href="#inicio">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#sobre-mi">Sobre mí</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#tecnologias">Tecnologías</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#experiencia">Experiencia</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#proyectos">Proyectos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#educacion">Educación</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#contacto">Contacto</a>
+            </li>
+          </ul>
+          <div class="acciones-menu ms-lg-3">
+            <button
+              class="boton-icono"
+              id="boton-tema"
+              type="button"
+              aria-label="Cambiar tema"
+            >
+              <i class="fa-solid fa-sun"></i>
+            </button>
+            <button
+              class="btn btn-primary btn-sm"
+              data-descargar-cv
+              type="button"
+            >
+              <i class="fa-solid fa-download"></i> Descargar CV
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main id="contenido-principal">
+      <!-- Este contenedor es la fuente del PDF visual. -->
+      <div id="documento-cv">
+        <header class="seccion hero" id="inicio">
+          <div class="container">
+            <div class="row align-items-center g-5">
+              <div class="col-lg-7" data-aos="fade-up">
+                <div class="estado-disponible">
+                  <span></span><span id="hero-estado"></span>
+                </div>
+                <p class="texto-superior" id="hero-especialidad"></p>
+                <h1 id="hero-nombre"></h1>
+                <p class="cargo-dinamico">
+                  <span>Perfil profesional:</span>
+                  <strong id="cargo-dinamico"></strong>
+                </p>
+                <p class="descripcion-hero" id="hero-descripcion"></p>
+                <div class="acciones-hero">
+                  <button
+                    class="btn btn-primary btn-lg"
+                    data-descargar-cv
+                    type="button"
+                  >
+                    <i class="fa-solid fa-download"></i> Descargar Hoja de Vida
+                  </button>
+                  <a
+                    class="btn btn-borde btn-lg"
+                    id="hero-github"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    ><i class="fa-brands fa-github"></i> GitHub</a
+                  >
+                  <a
+                    class="btn btn-borde btn-lg"
+                    id="hero-linkedin"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    ><i class="fa-brands fa-linkedin-in"></i> LinkedIn</a
+                  >
+                </div>
+                <div class="acciones-secundarias">
+                  <a class="enlace-texto" href="#contacto"
+                    >Contactarme <i class="fa-solid fa-arrow-right"></i
+                  ></a>
+                  <button
+                    class="enlace-texto boton-texto"
+                    id="boton-imprimir"
+                    type="button"
+                  >
+                    <i class="fa-solid fa-print"></i> Versión ATS / Imprimir
+                  </button>
+                </div>
+                <dl class="datos-rapidos" id="datos-rapidos"></dl>
+              </div>
+              <div class="col-lg-5" data-aos="zoom-in" data-aos-delay="100">
+                <article class="tarjeta-perfil">
+                  <div class="barra-ventana">
+                    <span></span><span></span><span></span
+                    ><small>perfil.tsx</small>
+                  </div>
+                  <div class="contenedor-foto">
+                    <img
+                      id="foto-perfil"
+                      class="foto-perfil"
+                      src="assets/img/perfil/luis-barbosa-perfil.jpg"
+                      alt="Fotografía profesional"
+                      width="600"
+                      height="700"
+                    />
+                  </div>
+                  <div class="codigo-perfil" aria-hidden="true">
+                    <p>
+                      <span class="codigo-morado">const</span> developer = {
+                    </p>
+                    <p>
+                      &nbsp;&nbsp;focus:
+                      <span class="codigo-verde">"Mobile & Full Stack"</span>,
+                    </p>
+                    <p>
+                      &nbsp;&nbsp;stack:
+                      <span class="codigo-verde"
+                        >"React Native + TypeScript"</span
+                      >,
+                    </p>
+                    <p>
+                      &nbsp;&nbsp;mindset:
+                      <span class="codigo-verde">"Product & UX"</span>
+                    </p>
+                    <p>};</p>
+                  </div>
+                </article>
+              </div>
+            </div>
+            <div class="row g-3 mt-4" id="indicadores-hero"></div>
+          </div>
+        </header>
+
+        <section class="seccion" id="sobre-mi">
+          <div class="container">
+            <div class="encabezado-seccion" data-aos="fade-up">
+              <span>01 · Perfil profesional</span>
+              <h2 id="sobre-mi-titulo"></h2>
+            </div>
+            <div class="row g-4">
+              <div class="col-lg-8" data-aos="fade-up">
+                <article
+                  class="tarjeta tarjeta-grande"
+                  id="sobre-mi-texto"
+                ></article>
+              </div>
+              <div class="col-lg-4" data-aos="fade-up" data-aos-delay="80">
+                <article class="tarjeta h-100">
+                  <h3>Roles de interés</h3>
+                  <div class="lista-roles" id="roles-interes"></div>
+                </article>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="seccion seccion-alternativa" id="tecnologias">
+          <div class="container">
+            <div class="encabezado-seccion" data-aos="fade-up">
+              <span>02 · Stack técnico</span>
+              <h2>Tecnologías y herramientas con las que construyo.</h2>
+            </div>
+            <div class="row g-4" id="lista-tecnologias"></div>
+          </div>
+        </section>
+
+        <section class="seccion" id="experiencia">
+          <div class="container">
+            <div class="encabezado-seccion" data-aos="fade-up">
+              <span>03 · Experiencia</span>
+              <h2>Experiencia aplicada a procesos y soluciones reales.</h2>
+            </div>
+            <div id="lista-experiencia"></div>
+          </div>
+        </section>
+
+        <section class="seccion seccion-alternativa" id="proyectos">
+          <div class="container">
+            <div class="encabezado-seccion" data-aos="fade-up">
+              <span>04 · Portafolio</span>
+              <h2>Productos diseñados para resolver necesidades reales.</h2>
+            </div>
+            <div class="row g-4" id="lista-proyectos"></div>
+          </div>
+        </section>
+
+        <section class="seccion" id="educacion">
+          <div class="container">
+            <div class="encabezado-seccion" data-aos="fade-up">
+              <span>05 · Formación</span>
+              <h2>Educación, certificaciones y aprendizaje continuo.</h2>
+            </div>
+            <div class="row g-4">
+              <div class="col-lg-8" data-aos="fade-up">
+                <div class="linea-tiempo" id="lista-educacion"></div>
+              </div>
+              <div class="col-lg-4" data-aos="fade-up" data-aos-delay="80">
+                <article class="tarjeta h-100">
+                  <h3>Certificaciones</h3>
+                  <div
+                    class="lista-certificaciones"
+                    id="lista-certificaciones"
+                  ></div>
+                </article>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="seccion seccion-alternativa" id="habilidades">
+          <div class="container">
+            <div class="row g-4">
+              <div class="col-lg-7" data-aos="fade-up">
+                <article class="tarjeta h-100">
+                  <span class="subtitulo-tarjeta"
+                    >Habilidades profesionales</span
+                  >
+                  <h2>
+                    Trabajo con criterio, comunicación y enfoque en resultados.
+                  </h2>
+                  <div class="nube-habilidades" id="lista-habilidades"></div>
+                </article>
+              </div>
+              <div class="col-lg-5" data-aos="fade-up" data-aos-delay="80">
+                <article class="tarjeta h-100">
+                  <span class="subtitulo-tarjeta">Idiomas</span>
+                  <h2>Comunicación</h2>
+                  <div id="lista-idiomas"></div>
+                </article>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="seccion" id="contacto">
+          <div class="container">
+            <div class="tarjeta-contacto" data-aos="fade-up">
+              <div class="row g-5 align-items-center">
+                <div class="col-lg-6">
+                  <span class="subtitulo-tarjeta">Contacto</span>
+                  <h2>Construyamos un producto útil, claro y escalable.</h2>
+                  <p>
+                    Puedes contactarme directamente por correo, teléfono,
+                    LinkedIn o GitHub.
+                  </p>
+                  <div class="datos-contacto" id="datos-contacto"></div>
+                </div>
+                <div class="col-lg-6">
+                  <form
+                    id="formulario-contacto"
+                    class="formulario-contacto needs-validation"
+                    novalidate
+                  >
+                    <div class="row g-3">
+                      <div class="col-md-6">
+                        <label class="form-label" for="nombre-contacto"
+                          >Nombre</label
+                        ><input
+                          class="form-control"
+                          id="nombre-contacto"
+                          name="nombre"
+                          type="text"
+                          required
+                        />
+                        <div class="invalid-feedback">Escribe tu nombre.</div>
+                      </div>
+                      <div class="col-md-6">
+                        <label class="form-label" for="correo-contacto"
+                          >Correo</label
+                        ><input
+                          class="form-control"
+                          id="correo-contacto"
+                          name="correo"
+                          type="email"
+                          required
+                        />
+                        <div class="invalid-feedback">
+                          Escribe un correo válido.
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <label class="form-label" for="asunto-contacto"
+                          >Asunto</label
+                        ><input
+                          class="form-control"
+                          id="asunto-contacto"
+                          name="asunto"
+                          type="text"
+                          value="Oportunidad profesional"
+                        />
+                      </div>
+                      <div class="col-12">
+                        <label class="form-label" for="mensaje-contacto"
+                          >Mensaje</label
+                        ><textarea
+                          class="form-control"
+                          id="mensaje-contacto"
+                          name="mensaje"
+                          rows="5"
+                          required
+                        ></textarea>
+                        <div class="invalid-feedback">Escribe un mensaje.</div>
+                      </div>
+                      <div class="col-12">
+                        <button class="btn btn-primary w-100" type="submit">
+                          <i class="fa-solid fa-paper-plane"></i> Preparar
+                          correo
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <footer class="pie-pagina">
+          <div
+            class="container d-flex flex-column flex-md-row justify-content-between gap-2"
+          >
+            <p>
+              © <span id="anio-actual"></span> <span id="nombre-footer"></span>.
+            </p>
+            <p>Diseñado para reclutadores, ATS y oportunidades reales.</p>
+          </div>
+        </footer>
+      </div>
+    </main>
+
+    <button
+      class="boton-subir"
+      id="boton-subir"
+      type="button"
+      aria-label="Volver arriba"
+    >
+      <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- Orden obligatorio: cliente, configuración, datos, módulos y aplicación. -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/datos/supabase-config.js"></script>
+    <script src="assets/js/datos/portafolio-datos.js"></script>
+    <script src="assets/js/modulos/supabase-publico.js"></script>
+    <script src="assets/js/modulos/renderizado.js"></script>
+    <script src="assets/js/modulos/interacciones.js"></script>
+    <script src="assets/js/modulos/exportar-pdf.js"></script>
+    <script src="assets/js/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,35 @@
+/* ================================================================
+   ADAPTACIÓN A TABLETAS Y CELULARES
+   ================================================================ */
+@media (max-width: 991.98px) {
+  .barra-navegacion { background: rgba(9,13,22,.94); border-bottom-color: var(--borde); }
+  [data-bs-theme="light"] .barra-navegacion { background: rgba(246,248,252,.96); }
+  .navbar-collapse { margin-top: 14px; padding: 14px; border: 1px solid var(--borde); border-radius: 16px; background: var(--fondo-elevado); }
+  .acciones-menu { margin-top: 12px; }
+  .hero { min-height: auto; padding-top: 140px; }
+  .tarjeta-experiencia ul { columns: 1; }
+}
+
+@media (max-width: 767.98px) {
+  .seccion { padding: 78px 0; }
+  .hero h1 { font-size: clamp(2.7rem,14vw,4.6rem); }
+  .acciones-hero .btn { width: 100%; }
+  .datos-rapidos { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .datos-rapidos div { padding-right: 0; border-right: 0; }
+  .datos-contacto { grid-template-columns: 1fr; }
+  .tarjeta,.tarjeta-experiencia,.proyecto-contenido { padding: 22px; }
+}
+
+@media (max-width: 479.98px) {
+  .marca-textos small { display: none; }
+  .hero { padding-top: 120px; }
+  .datos-rapidos { grid-template-columns: 1fr; }
+  .acciones-secundarias { display: grid; }
+  .proyecto-encabezado { flex-direction: column; }
+  .proyecto-numero { display: none; }
+  .boton-subir { right: 14px; bottom: 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,*::before,*::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
