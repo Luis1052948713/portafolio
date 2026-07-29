@@ -146,7 +146,7 @@ const PORTAFOLIO_DATOS = {
       destacado: true,
       nombre: "MAG-COB01",
       subtitulo: "Aplicación Fintech profesional",
-      imagen: "assets/img/proyectos/cobros.jpg",
+      imagen: "assets/img/proyectos/cobros.jpeg",
       descripcion:
         "Aplicación multiplataforma para gestionar clientes, préstamos, pagos, cuotas, caja, rutas de cobro, reportes y copias de seguridad, diseñada con arquitectura offline-first.",
       tecnologias: [
@@ -173,7 +173,7 @@ const PORTAFOLIO_DATOS = {
       destacado: false,
       nombre: "QuickServe POS Enterprise",
       subtitulo: "Sistema POS para restaurantes",
-      imagen: "assets/img/proyectos/quickserve-pos-portada.jpg",
+      imagen: "",
       descripcion:
         "Sistema empresarial para administrar la operación diaria de restaurantes desde pedidos y cocina hasta caja, clientes, ventas y reportes.",
       tecnologias: ["React Native", "Expo", "TypeScript", "SQLite", "Supabase"],
@@ -218,7 +218,7 @@ const PORTAFOLIO_DATOS = {
       periodo: "Finalizado",
       detalle: "Educación media",
       archivo:
-        "assets/documentos/certificados/diploma de bachiller academico.pdf",
+        "assets/documentos/certificados/diploma bachiller.pdf",
     },
   ],
 

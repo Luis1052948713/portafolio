@@ -102,13 +102,14 @@
       const galeria = evidencias.length ? `<div class="proyecto-evidencias"><h4>Evidencias</h4><div>${evidencias.map((imagen, evidenciaIndice) => `<a href="${escapar(imagen)}" target="_blank" rel="noopener"><img src="${escapar(imagen)}" alt="Evidencia ${evidenciaIndice + 1} de ${escapar(proyecto.nombre)}" loading="lazy" /></a>`).join("")}</div></div>` : "";
       const videoArchivo = proyecto.videoArchivo ? `<div class="proyecto-video"><h4>Video del proyecto</h4><video controls preload="metadata"><source src="${escapar(proyecto.videoArchivo)}" />Tu navegador no puede reproducir este video.</video></div>` : "";
       const botonVideo = proyecto.video ? `<a class="btn btn-borde btn-sm" href="${escapar(proyecto.video)}" target="_blank" rel="noopener"><i class="fa-solid fa-play"></i> Video</a>` : "";
+      const portada = proyecto.imagen ? `<div class="proyecto-imagen"><img src="${escapar(proyecto.imagen)}" alt="Portada de ${escapar(proyecto.nombre)}" loading="lazy" /></div>` : `<div class="proyecto-imagen proyecto-sin-portada" aria-hidden="true"><i class="fa-solid fa-code"></i></div>`;
       const botonDemo = proyecto.demo
         ? `<a class="btn btn-borde btn-sm" href="${escapar(proyecto.demo)}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Demo</a>`
         : `<button class="btn btn-borde btn-sm" type="button" disabled title="La demostración todavía no es pública"><i class="fa-solid fa-lock"></i> Demo privada</button>`;
       return `
         <div class="col-lg-6" data-aos="fade-up">
           <article class="tarjeta-proyecto h-100">
-            <div class="proyecto-imagen"><img src="${escapar(proyecto.imagen)}" alt="Portada de ${escapar(proyecto.nombre)}" loading="lazy" /></div>
+            ${portada}
             <div class="proyecto-contenido">
               <div class="proyecto-encabezado"><div>${proyecto.destacado ? '<span class="proyecto-destacado">Proyecto principal</span>' : ''}<h3>${escapar(proyecto.nombre)}</h3><p class="proyecto-subtitulo">${escapar(proyecto.subtitulo)}</p></div><span class="proyecto-numero">0${indice + 1}</span></div>
               <p>${escapar(proyecto.descripcion)}</p>

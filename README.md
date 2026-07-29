@@ -1,177 +1,68 @@
 # Portafolio profesional de Luis Barbosa
 
-Este proyecto reemplaza la versión anterior del repositorio `portafolio` y conserva la dirección de GitHub Pages:
+Portafolio dinámico con constructor visual, autenticación, publicación por usuario y almacenamiento multimedia.
+
+- Sitio público: https://portafolio-wine-iota.vercel.app/
+- Panel: https://portafolio-wine-iota.vercel.app/admin
+- Producción: Vercel
+- Código: GitHub
+- Datos, usuarios y archivos: Supabase
+
+## Actualizar contenido
+
+El contenido se administra desde `/admin`; no es necesario editar los archivos JavaScript.
+
+1. Inicia sesión.
+2. Edita el borrador mediante los pasos del constructor.
+3. Pulsa **Guardar borrador** para conservar cambios privados.
+4. Pulsa **Generar y publicar todo** para actualizar el portafolio público.
+
+Cada usuario aprobado tiene un borrador, archivos y publicación independientes.
+
+## Desarrollo local
+
+Abre la carpeta con Live Server en Visual Studio Code. Las páginas principales son:
 
 ```text
-https://portafolio-wine-iota.vercel.app/
+index.html       Portafolio público
+admin.html       Constructor visual
 ```
 
-## La regla más importante
-
-Para cambiar textos, enlaces, experiencia, proyectos o estudios, abre solamente:
+La configuración pública de Supabase está en:
 
 ```text
-assets/js/datos/portafolio-datos.js
+assets/js/datos/supabase-config.js
 ```
 
-No necesitas tocar normalmente `index.html`, los módulos de JavaScript ni los estilos.
+La publishable key puede estar en el navegador. Nunca agregues una secret key o `service_role` key al repositorio.
 
-## Estructura organizada
+## Estructura
 
 ```text
-portafolio/
-├── index.html
-├── sobremi.html                 # Redirección compatible con el enlace antiguo
-├── curriculum.html              # Redirección compatible con el enlace antiguo
-├── README.md
-├── robots.txt
-├── sitemap.xml
-├── .nojekyll
-│
-└── assets/
-    ├── css/
-    │   ├── variables.css        # Colores, fuentes y medidas principales
-    │   ├── estilos.css          # Diseño general y componentes
-    │   ├── responsive.css       # Adaptación para celular y tableta
-    │   └── impresion.css        # PDF y versión ATS
-    │
-    ├── js/
-    │   ├── datos/
-    │   │   └── portafolio-datos.js  # Archivo principal para editar
-    │   ├── modulos/
-    │   │   ├── renderizado.js       # Construye el contenido
-    │   │   ├── interacciones.js     # Tema, navegación y formulario
-    │   │   └── exportar-pdf.js      # Descarga del PDF
-    │   └── app.js                   # Inicia los módulos
-    │
-    ├── img/
-    │   ├── perfil/
-    │   ├── proyectos/
-    │   └── redes/
-    │
-    ├── documentos/
-    │   ├── certificados/
-    │   └── hoja-de-vida/
-    │
-    └── favicon/
+assets/
+  css/                     Estilos públicos, administrativos y ATS
+  documentos/certificados/ Certificados locales de respaldo
+  favicon/                 Iconos del sitio
+  img/perfil/              Fotografía local de respaldo
+  img/proyectos/           Portadas locales de respaldo
+  js/datos/                Configuración y datos locales de respaldo
+  js/modulos/              Renderizado, Supabase, interacciones y PDF
+supabase/                   Instalación y migraciones SQL
+admin.html                  Constructor
+index.html                  Sitio público
+vercel.json                 Configuración de despliegue
 ```
 
-## Nomenclatura utilizada
+## Supabase
 
-Todo archivo nuevo debe seguir estas reglas:
+Las instrucciones están en [SUPABASE.md](SUPABASE.md). Para una instalación existente, ejecuta las migraciones en el orden documentado.
 
-1. Nombres en minúscula.
-2. Sin espacios.
-3. Sin tildes ni `ñ`.
-4. Palabras separadas con guiones.
-5. El nombre debe explicar el contenido.
+Los datos locales de `portafolio-datos.js` se conservan únicamente como respaldo y para la importación inicial.
 
-Correcto:
+## Despliegue
 
-```text
-certificado-aws-cloud-foundations.pdf
-quickserve-pos-portada.jpg
-portafolio-datos.js
-```
+La rama `main` está conectada con Vercel. Cada cambio de código enviado a GitHub genera un despliegue automático. Las actualizaciones hechas desde el panel se publican directamente desde Supabase y no requieren un nuevo despliegue.
 
-Evita:
+## Compatibilidad
 
-```text
-Certificado Luis FINAL (2).pdf
-perfil (1).jpg
-Mi Proyecto Nuevo.jpg
-```
-
-## Cambiar la información personal
-
-Abre `assets/js/datos/portafolio-datos.js` y busca:
-
-```javascript
-persona: {
-  nombre: "Luis Fernando Barbosa Orozco",
-  cargoPrincipal: "Software Developer",
-  correo: "luisfernandobarbosaorozco7@gmail.com"
-}
-```
-
-Cambia solamente los textos que están entre comillas.
-
-## Cambiar la foto
-
-Reemplaza:
-
-```text
-assets/img/perfil/luis-barbosa-perfil.jpg
-```
-
-Conserva el mismo nombre para no modificar el código.
-
-## Agregar un proyecto
-
-En `portafolio-datos.js`, busca `proyectos` y copia un bloque completo:
-
-```javascript
-{
-  destacado: false,
-  nombre: "Nombre del proyecto",
-  subtitulo: "Tipo de proyecto",
-  imagen: "assets/img/proyectos/nombre-del-proyecto.jpg",
-  descripcion: "Descripción clara.",
-  tecnologias: ["React", "TypeScript"],
-  caracteristicas: [
-    "Primera característica.",
-    "Segunda característica."
-  ],
-  github: "https://github.com/usuario/repositorio",
-  demo: ""
-}
-```
-
-Cuando `demo` queda vacío, el sitio muestra `Demo privada`.
-
-## Cambiar los colores
-
-Abre:
-
-```text
-assets/css/variables.css
-```
-
-Las variables principales son:
-
-```css
---color-principal: #7c5cff;
---color-secundario: #2dd4bf;
---fondo: #090d16;
-```
-
-## Abrir en el computador
-
-La forma recomendada es utilizar Live Server en Visual Studio Code.
-
-También puede abrirse con doble clic, pero el servidor local evita restricciones de algunas imágenes y funciones del navegador.
-
-## Publicar en GitHub Pages
-
-1. Reemplaza el contenido del repositorio `portafolio` por este proyecto.
-2. Sube todos los archivos.
-3. En GitHub abre `Settings` → `Pages`.
-4. Selecciona `Deploy from a branch`.
-5. Usa la rama `main` y la carpeta `/root`.
-6. Guarda los cambios.
-
-## Archivos conservados del proyecto anterior
-
-Se conservaron y reorganizaron:
-
-- Fotografía de perfil.
-- Imagen de perfil recortada.
-- Certificado AWS Academy Cloud Foundations.
-- Certificado de formulación de proyectos de alto impacto.
-- Enlaces antiguos `sobremi.html` y `curriculum.html` mediante redirección.
-
-## Panel de administración
-
-El proyecto incluye `admin.html`, un constructor completo para administrar identidad, fotografía, perfil, tecnologías, experiencias, proyectos, evidencias, videos, estudios, certificaciones, habilidades e idiomas desde el navegador. La configuración completa está en [SUPABASE.md](SUPABASE.md) y el esquema seguro en `supabase/setup.sql`.
-
-Mientras Supabase no esté configurado, el portafolio continúa usando `assets/js/datos/portafolio-datos.js` como respaldo.
+`sobremi.html` y `curriculum.html` se conservan como redirecciones para enlaces antiguos.
