@@ -6,4 +6,5 @@ window.SUPABASE_CONFIG = {
   url: "https://ztlctdjpcffckmxalhjp.supabase.co",
   publishableKey: "sb_publishable_kgLpnuNIULoyKG_4oETuTg_GtWMpvtc",
   bucket: "portafolio",
+  siteUrl: "https://portafolio-wine-iota.vercel.app/",
 };

@@ -19,7 +19,7 @@
 
 const PORTAFOLIO_DATOS = {
   configuracion: {
-    urlPublica: "https://luis1052948713.github.io/portafolio/",
+    urlPublica: "https://portafolio-wine-iota.vercel.app/",
     tituloSeo: "Luis Fernando Barbosa Orozco | Software Developer",
     descripcionSeo:
       "Portafolio profesional de Luis Fernando Barbosa Orozco, desarrollador especializado en React Native, Expo, TypeScript, SQLite y Supabase.",

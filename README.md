@@ -3,7 +3,7 @@
 Este proyecto reemplaza la versión anterior del repositorio `portafolio` y conserva la dirección de GitHub Pages:
 
 ```text
-https://luis1052948713.github.io/portafolio/
+https://portafolio-wine-iota.vercel.app/
 ```
 
 ## La regla más importante

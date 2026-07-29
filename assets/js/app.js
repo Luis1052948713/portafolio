@@ -5,6 +5,8 @@
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     await window.PortafolioSupabase?.cargarContenido();
+    const urlOficial = window.SUPABASE_CONFIG?.siteUrl;
+    if (urlOficial && window.PORTAFOLIO_DATOS?.configuracion) window.PORTAFOLIO_DATOS.configuracion.urlPublica = urlOficial;
     window.PortafolioRenderizado.renderizarTodo();
     window.PortafolioInteracciones.iniciarTodo();
     window.PortafolioPdf.iniciar();
