@@ -78,3 +78,14 @@ Ejecuta `supabase/upgrade-usuarios.sql` en **Supabase → SQL Editor**. Después
 3. Agrega `https://portafolio-wine-iota.vercel.app/**` a Redirect URLs.
 
 Las cuentas nuevas no obtienen acceso automáticamente. Aparecen en **Usuarios** dentro del constructor y un administrador existente debe aprobarlas.
+## Activar portafolios separados por usuario
+
+Ejecuta `supabase/upgrade-multiusuario.sql` después de las otras actualizaciones. Esta migración:
+
+- Conserva el portafolio principal de Luis.
+- Crea un borrador vacío para cada usuario nuevo aprobado.
+- Separa publicaciones y archivos por propietario.
+- Impide que un usuario edite contenido de otra cuenta.
+- Mantiene `https://portafolio-wine-iota.vercel.app/` como portafolio principal.
+
+Los portafolios adicionales se publican con una URL que incluye su identificador, por ejemplo `/?portfolio=nombre-identificador`.

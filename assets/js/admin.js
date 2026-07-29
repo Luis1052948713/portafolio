@@ -9,6 +9,8 @@
   let datos = clonar(window.PORTAFOLIO_DATOS || {});
   let pasoActual = 0;
   let fechaPublicacion = null;
+  let usuarioActual = null;
+  let slugActual = null;
   let temporizadorMensaje = null;
   const archivosPendientes = new Map();
 
@@ -54,6 +56,19 @@
     indicadores: { propiedad: "indicadores", titulo: "Indicador destacado", campos: [["valor","Valor","text"],["etiqueta","Etiqueta","text"],["icono","Icono","icono"]] },
   };
 
+  function crearPortafolioVacio() {
+    return {
+      configuracion: { urlPublica: "", tituloSeo: "Mi portafolio profesional", descripcionSeo: "Portafolio profesional", archivoPdf: "hoja-de-vida.pdf" },
+      persona: { nombre: "", nombreCorto: "", iniciales: "", cargoPrincipal: "", cargosAlternativos: [], especialidad: "", frasePrincipal: "", estadoLaboral: "", ciudad: "", departamento: "", pais: "", modalidad: "", telefonoVisible: "", telefonoEnlace: "", correo: "", github: "", linkedin: "", foto: "" },
+      sobreMi: { titulo: "", parrafos: [], roles: [] }, tecnologias: [], experiencia: [], proyectos: [], educacion: [], certificaciones: [], habilidades: [], idiomas: [], indicadores: [],
+    };
+  }
+
+  function crearSlug(email,id) {
+    const base = (email?.split("@")[0] || "portafolio").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"") || "portafolio";
+    return `${base}-${String(id).slice(0,8)}`;
+  }
+
   function asegurarEstructura() {
     datos.configuracion ||= {};
     datos.persona ||= {};
@@ -76,6 +91,7 @@
     if (normal.includes("email not confirmed")) return "Debes confirmar el correo en Supabase.";
     if (normal.includes("invalid login credentials")) return "Correo o contraseña no reconocidos por Supabase.";
     if (normal.includes("portfolio_access_requests")) return "Falta ejecutar supabase/upgrade-usuarios.sql en Supabase.";
+    if (normal.includes("portfolio_sites")) return "Falta ejecutar supabase/upgrade-multiusuario.sql en Supabase.";
     if (normal.includes("portfolio_site") || normal.includes("schema cache")) return "Falta ejecutar supabase/upgrade-constructor.sql en Supabase.";
     if (normal.includes("row-level security") || normal.includes("no autorizado")) return "Este usuario no tiene permisos de administrador.";
     return original;
@@ -235,7 +251,8 @@
     const maximo = 50 * 1024 * 1024;
     if (archivo.size > maximo) throw new Error(`${archivo.name} supera el límite de 50 MB.`);
     const bucket = window.SUPABASE_CONFIG.bucket || "portafolio";
-    const ruta = `${carpeta}/${archivoRutaSegura(archivo.name)}`;
+    if (!usuarioActual?.id) throw new Error("No hay una sesión de usuario activa.");
+    const ruta = `${usuarioActual.id}/${carpeta}/${archivoRutaSegura(archivo.name)}`;
     const { error } = await cliente.storage.from(bucket).upload(ruta, archivo, { upsert: false, contentType: archivo.type || undefined });
     if (error) throw error;
     return cliente.storage.from(bucket).getPublicUrl(ruta).data.publicUrl;
@@ -272,7 +289,7 @@
     cargando(boton,true,"Guardando...");
     try {
       await procesarArchivos();
-      const { error } = await cliente.from("portfolio_site").update({ borrador: datosPublicables(), updated_at: new Date().toISOString() }).eq("id",1);
+      const { error } = await cliente.from("portfolio_sites").update({ borrador: datosPublicables(), updated_at: new Date().toISOString() }).eq("owner_id",usuarioActual.id);
       if (error) throw error;
       mensaje("Borrador guardado. Todavía no se ha publicado.");
       renderPaso();
@@ -303,11 +320,20 @@
   }
 
   async function cargarConstructor() {
-    const { data: fila, error } = await cliente.from("portfolio_site").select("borrador,publicado,published_at").eq("id",1).single();
+    const { data: fila, error } = await cliente.from("portfolio_sites").select("owner_id,slug,borrador,publicado,published_at").maybeSingle();
     if (error) throw error;
-    const guardado = fila.borrador && Object.keys(fila.borrador).length ? fila.borrador : fila.publicado;
-    if (guardado && Object.keys(guardado).length) datos = guardado;
-    fechaPublicacion = fila.published_at;
+    if (!fila) {
+      datos = crearPortafolioVacio();
+      slugActual = crearSlug(usuarioActual.email,usuarioActual.id);
+      const { error: errorCrear } = await cliente.from("portfolio_sites").insert({ owner_id: usuarioActual.id, slug: slugActual, borrador: datos, principal: false });
+      if (errorCrear) throw errorCrear;
+      fechaPublicacion = null;
+    } else {
+      slugActual = fila.slug;
+      const guardado = fila.borrador && Object.keys(fila.borrador).length ? fila.borrador : fila.publicado;
+      datos = guardado && Object.keys(guardado).length ? guardado : crearPortafolioVacio();
+      fechaPublicacion = fila.published_at;
+    }
     asegurarEstructura(); actualizarFecha(); renderPaso();
   }
 
@@ -383,6 +409,7 @@
       if (error) throw error;
       const { data: esAdmin } = await cliente.rpc("is_portfolio_admin");
       if (!esAdmin) { await cliente.auth.signOut(); throw new Error("No autorizado"); }
+      usuarioActual = sesion.user;
       mostrarPanel(sesion.session); await cargarConstructor();
     } catch (error) { mensaje(traducirError(error),"error"); }
     finally { cargando(boton,false); }
@@ -431,11 +458,11 @@
     $("#constructor-pasos").addEventListener("click",e=>{ const b=e.target.closest("[data-paso]"); if(b)cambiarPaso(b.dataset.paso); });
     $("#constructor-contenido").addEventListener("click",eventosConstructor);
     $("#constructor-contenido").addEventListener("change", evento => { if (evento.target.dataset.control === "icono") evento.target.closest(".selector-icono")?.querySelector("i")?.setAttribute("class", evento.target.value); });
-    $("#boton-salir").addEventListener("click",async()=>{await cliente.auth.signOut();mostrarPanel(null);});
+    $("#boton-salir").addEventListener("click",async()=>{await cliente.auth.signOut();usuarioActual=null;slugActual=null;mostrarPanel(null);});
     if (new URLSearchParams(window.location.search).has("recovery")) { mostrarPanel(null); mostrarVistaAuth("nueva"); return; }
     const { data: sesion } = await cliente.auth.getSession();
     if (sesion.session) {
-      try { const { data: esAdmin } = await cliente.rpc("is_portfolio_admin"); if (!esAdmin) throw new Error("No autorizado"); mostrarPanel(sesion.session); await cargarConstructor(); }
+      try { const { data: esAdmin } = await cliente.rpc("is_portfolio_admin"); if (!esAdmin) throw new Error("No autorizado"); usuarioActual = sesion.session.user; mostrarPanel(sesion.session); await cargarConstructor(); }
       catch (error) { if (traducirError(error).includes("upgrade-constructor")) $("#aviso-actualizacion").classList.remove("d-none"); else mensaje(traducirError(error),"error"); }
     } else mostrarPanel(null);
   }

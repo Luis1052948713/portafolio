@@ -42,11 +42,16 @@
     const cliente = obtenerCliente();
     if (!cliente) return { origen: "local", datos: window.PORTAFOLIO_DATOS };
     try {
-      const { data: publicado, error } = await cliente.rpc("obtener_portafolio_publicado");
+      const slugSolicitado = new URLSearchParams(window.location.search).get("portfolio");
+      const consultaPublicada = slugSolicitado
+        ? cliente.rpc("obtener_portafolio_publicado", { slug_solicitado: slugSolicitado })
+        : cliente.rpc("obtener_portafolio_publicado");
+      const { data: publicado, error } = await consultaPublicada;
       if (!error && publicado && typeof publicado === "object" && Object.keys(publicado).length) {
         window.PORTAFOLIO_DATOS = combinar(window.PORTAFOLIO_DATOS, publicado);
         return { origen: "constructor", datos: window.PORTAFOLIO_DATOS };
       }
+      if (slugSolicitado) return { origen: "portafolio-sin-publicar", datos: window.PORTAFOLIO_DATOS };
       const cargoAnterior = await cargarModeloAnterior(cliente);
       return { origen: cargoAnterior ? "supabase-anterior" : "local", datos: window.PORTAFOLIO_DATOS };
     } catch (error) {
