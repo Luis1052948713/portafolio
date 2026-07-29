@@ -75,6 +75,7 @@
     const normal = original.toLowerCase();
     if (normal.includes("email not confirmed")) return "Debes confirmar el correo en Supabase.";
     if (normal.includes("invalid login credentials")) return "Correo o contraseña no reconocidos por Supabase.";
+    if (normal.includes("portfolio_access_requests")) return "Falta ejecutar supabase/upgrade-usuarios.sql en Supabase.";
     if (normal.includes("portfolio_site") || normal.includes("schema cache")) return "Falta ejecutar supabase/upgrade-constructor.sql en Supabase.";
     if (normal.includes("row-level security") || normal.includes("no autorizado")) return "Este usuario no tiene permisos de administrador.";
     return original;
@@ -310,6 +311,71 @@
     asegurarEstructura(); actualizarFecha(); renderPaso();
   }
 
+  function mostrarVistaAuth(vista) {
+    const ids = { login: "#formulario-acceso", recuperar: "#formulario-recuperar", registro: "#formulario-registro", nueva: "#formulario-nueva-clave" };
+    Object.entries(ids).forEach(([nombre,selector]) => $(selector)?.classList.toggle("d-none", nombre !== vista));
+    const titulos = { login: ["Iniciar sesión","Acceso exclusivo para usuarios aprobados."], recuperar: ["Recuperar contraseña","Te enviaremos un enlace seguro por correo."], registro: ["Crear una cuenta","El administrador deberá aprobar el acceso."], nueva: ["Nueva contraseña","Elige una contraseña segura para tu cuenta."] };
+    const [titulo,descripcion] = titulos[vista] || titulos.login;
+    $("#seccion-acceso h2").textContent = titulo;
+    $("#seccion-acceso > div > p").textContent = descripcion;
+  }
+
+  async function recuperarClave(evento) {
+    evento.preventDefault(); const boton = evento.submitter; cargando(boton,true,"Enviando...");
+    try {
+      const redirectTo = `${(window.SUPABASE_CONFIG.siteUrl || window.location.origin + "/").replace(/\/$/,"")}/admin?recovery=1`;
+      const { error } = await cliente.auth.resetPasswordForEmail($("#correo-recuperar").value.trim(), { redirectTo });
+      if (error) throw error;
+      mensaje("Si el correo está registrado, recibirás un enlace para cambiar la contraseña.");
+      mostrarVistaAuth("login");
+    } catch (error) { mensaje(traducirError(error),"error"); }
+    finally { cargando(boton,false); }
+  }
+
+  async function registrarUsuario(evento) {
+    evento.preventDefault(); const boton = evento.submitter; cargando(boton,true,"Creando...");
+    try {
+      const clave = $("#clave-registro").value, confirmacion = $("#clave-registro-confirmar").value;
+      if (clave !== confirmacion) throw new Error("Las contraseñas no coinciden.");
+      const emailRedirectTo = `${(window.SUPABASE_CONFIG.siteUrl || window.location.origin + "/").replace(/\/$/,"")}/admin`;
+      const { data, error } = await cliente.auth.signUp({ email: $("#correo-registro").value.trim(), password: clave, options: { emailRedirectTo } });
+      if (error) throw error;
+      if (data.session) await cliente.auth.signOut();
+      $("#formulario-registro").reset();
+      mensaje("Cuenta creada. Confirma el correo y espera la aprobación de un administrador.");
+      mostrarVistaAuth("login");
+    } catch (error) { mensaje(traducirError(error),"error"); }
+    finally { cargando(boton,false); }
+  }
+
+  async function actualizarClave(evento) {
+    evento.preventDefault(); const boton = evento.submitter; cargando(boton,true,"Actualizando...");
+    try {
+      const { error } = await cliente.auth.updateUser({ password: $("#nueva-clave").value });
+      if (error) throw error;
+      mensaje("Contraseña actualizada. Ya puedes continuar con tu sesión.");
+      history.replaceState({},"",window.location.pathname);
+      mostrarVistaAuth("login");
+    } catch (error) { mensaje(traducirError(error),"error"); }
+    finally { cargando(boton,false); }
+  }
+
+  async function cargarUsuarios() {
+    const lista = $("#lista-usuarios");
+    lista.innerHTML = '<div class="admin-vacio"><i class="fa-solid fa-spinner fa-spin"></i> Cargando usuarios...</div>';
+    const { data, error } = await cliente.from("portfolio_access_requests").select("user_id,email,estado,created_at").order("created_at",{ascending:false});
+    if (error) throw error;
+    lista.innerHTML = data?.length ? data.map(usuario => `<article class="usuario-solicitud"><div><strong>${escapar(usuario.email)}</strong><small>${escapar(usuario.estado)} · ${new Date(usuario.created_at).toLocaleDateString("es-CO")}</small></div><div class="usuario-acciones">${usuario.estado !== "aprobado" ? `<button class="btn btn-success btn-sm" type="button" data-aprobar-usuario="${usuario.user_id}"><i class="fa-solid fa-check"></i> Aprobar</button>` : ""}${usuario.estado !== "rechazado" ? `<button class="btn btn-outline-danger btn-sm" type="button" data-rechazar-usuario="${usuario.user_id}"><i class="fa-solid fa-ban"></i> Rechazar</button>` : ""}</div></article>`).join("") : '<div class="admin-vacio">No hay solicitudes de acceso.</div>';
+  }
+
+  async function revisarUsuario(usuario,aprobar) {
+    try {
+      const { error } = await cliente.rpc("revisar_solicitud_portafolio", { usuario, aprobar });
+      if (error) throw error;
+      await cargarUsuarios(); mensaje(aprobar ? "Usuario aprobado." : "Usuario rechazado.");
+    } catch (error) { mensaje(traducirError(error),"error"); }
+  }
+
   async function iniciarSesion(evento) {
     evento.preventDefault(); const boton = evento.submitter; cargando(boton,true,"Ingresando...");
     try {
@@ -326,6 +392,7 @@
     $("#seccion-acceso").classList.toggle("d-none",Boolean(sesion));
     $("#seccion-panel").classList.toggle("d-none",!sesion);
     $("#boton-salir").classList.toggle("d-none",!sesion);
+    $("#boton-usuarios").classList.toggle("d-none",!sesion);
   }
 
   function importarActuales() {
@@ -348,6 +415,14 @@
     if (!window.PortafolioSupabase?.estaConfigurado()) { $("#aviso-configuracion").classList.remove("d-none"); $("#formulario-acceso").querySelectorAll("input,button").forEach(c => c.disabled=true); return; }
     cliente = window.PortafolioSupabase.obtenerCliente();
     $("#formulario-acceso").addEventListener("submit",iniciarSesion);
+    $("#formulario-recuperar").addEventListener("submit",recuperarClave);
+    $("#formulario-registro").addEventListener("submit",registrarUsuario);
+    $("#formulario-nueva-clave").addEventListener("submit",actualizarClave);
+    document.querySelectorAll("[data-auth-vista]").forEach(boton => boton.addEventListener("click",()=>mostrarVistaAuth(boton.dataset.authVista)));
+    cliente.auth.onAuthStateChange(evento => { if (evento === "PASSWORD_RECOVERY") { mostrarPanel(null); mostrarVistaAuth("nueva"); } });
+    $("#boton-usuarios").addEventListener("click",async()=>{ $("#dialogo-usuarios").showModal(); try { await cargarUsuarios(); } catch(error) { $("#lista-usuarios").innerHTML = `<div class="admin-vacio">${escapar(traducirError(error))}</div>`; } });
+    $("#cerrar-usuarios").addEventListener("click",()=>$("#dialogo-usuarios").close());
+    $("#lista-usuarios").addEventListener("click",evento=>{ const aprobar=evento.target.closest("[data-aprobar-usuario]"), rechazar=evento.target.closest("[data-rechazar-usuario]"); if(aprobar) revisarUsuario(aprobar.dataset.aprobarUsuario,true); if(rechazar && confirm("¿Rechazar el acceso de este usuario?")) revisarUsuario(rechazar.dataset.rechazarUsuario,false); });
     $("#formulario-constructor").addEventListener("submit",publicar);
     $("#boton-guardar").addEventListener("click",guardarBorrador);
     $("#boton-siguiente").addEventListener("click",()=>cambiarPaso(pasoActual+1));
@@ -357,6 +432,7 @@
     $("#constructor-contenido").addEventListener("click",eventosConstructor);
     $("#constructor-contenido").addEventListener("change", evento => { if (evento.target.dataset.control === "icono") evento.target.closest(".selector-icono")?.querySelector("i")?.setAttribute("class", evento.target.value); });
     $("#boton-salir").addEventListener("click",async()=>{await cliente.auth.signOut();mostrarPanel(null);});
+    if (new URLSearchParams(window.location.search).has("recovery")) { mostrarPanel(null); mostrarVistaAuth("nueva"); return; }
     const { data: sesion } = await cliente.auth.getSession();
     if (sesion.session) {
       try { const { data: esAdmin } = await cliente.rpc("is_portfolio_admin"); if (!esAdmin) throw new Error("No autorizado"); mostrarPanel(sesion.session); await cargarConstructor(); }

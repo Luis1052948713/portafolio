@@ -15,7 +15,7 @@
   <main class="container-fluid admin-contenedor py-4 px-lg-5">
     <header class="admin-cabecera">
       <div><span class="subtitulo-tarjeta">Constructor completo</span><h1>Construye tu portafolio</h1><p>Crea un borrador y publícalo cuando esté listo.</p></div>
-      <div class="d-flex flex-wrap gap-2"><a class="btn btn-borde" href="index.html" target="_blank"><i class="fa-solid fa-eye"></i> Ver portafolio</a><button class="btn btn-borde d-none" id="boton-salir" type="button"><i class="fa-solid fa-right-from-bracket"></i> Salir</button></div>
+      <div class="d-flex flex-wrap gap-2"><a class="btn btn-borde" href="index.html" target="_blank"><i class="fa-solid fa-eye"></i> Ver portafolio</a><button class="btn btn-borde d-none" id="boton-usuarios" type="button"><i class="fa-solid fa-users-gear"></i> Usuarios</button><button class="btn btn-borde d-none" id="boton-salir" type="button"><i class="fa-solid fa-right-from-bracket"></i> Salir</button></div>
     </header>
 
     <div class="alert alert-warning d-none" id="aviso-configuracion" role="alert"><strong>Falta conectar Supabase.</strong> Completa <code>assets/js/datos/supabase-config.js</code>.</div>
@@ -24,10 +24,27 @@
 
     <section class="admin-acceso tarjeta" id="seccion-acceso">
       <div><span class="icono-tarjeta"><i class="fa-solid fa-lock"></i></span><h2>Iniciar sesión</h2><p>Acceso exclusivo para el administrador.</p></div>
-      <form id="formulario-acceso" class="row g-3">
+      <form id="formulario-acceso" class="row g-3 formulario-auth">
         <div class="col-12"><label class="form-label" for="correo-admin">Correo</label><input class="form-control" id="correo-admin" type="email" autocomplete="username" required /></div>
         <div class="col-12"><label class="form-label" for="clave-admin">Contraseña</label><input class="form-control" id="clave-admin" type="password" autocomplete="current-password" required /></div>
         <div class="col-12"><button class="btn btn-primary w-100" type="submit"><i class="fa-solid fa-arrow-right-to-bracket"></i> Entrar</button></div>
+        <div class="col-12 auth-enlaces"><button type="button" data-auth-vista="recuperar">¿Olvidaste tu contraseña?</button><button type="button" data-auth-vista="registro">Crear una cuenta</button></div>
+      </form>
+      <form id="formulario-recuperar" class="row g-3 formulario-auth d-none">
+        <div class="col-12"><p>Escribe tu correo y recibirás un enlace seguro para crear una contraseña nueva.</p><label class="form-label" for="correo-recuperar">Correo</label><input class="form-control" id="correo-recuperar" type="email" required /></div>
+        <div class="col-12"><button class="btn btn-primary w-100" type="submit"><i class="fa-solid fa-envelope"></i> Enviar recuperación</button></div>
+        <div class="col-12 auth-enlaces"><button type="button" data-auth-vista="login">Volver a iniciar sesión</button></div>
+      </form>
+      <form id="formulario-registro" class="row g-3 formulario-auth d-none">
+        <div class="col-12"><p>La cuenta deberá ser aprobada por un administrador antes de acceder al constructor.</p><label class="form-label" for="correo-registro">Correo</label><input class="form-control" id="correo-registro" type="email" autocomplete="email" required /></div>
+        <div class="col-12"><label class="form-label" for="clave-registro">Contraseña</label><input class="form-control" id="clave-registro" type="password" minlength="8" autocomplete="new-password" required /><small class="form-ayuda">Mínimo 8 caracteres.</small></div>
+        <div class="col-12"><label class="form-label" for="clave-registro-confirmar">Confirmar contraseña</label><input class="form-control" id="clave-registro-confirmar" type="password" minlength="8" autocomplete="new-password" required /></div>
+        <div class="col-12"><button class="btn btn-primary w-100" type="submit"><i class="fa-solid fa-user-plus"></i> Crear cuenta</button></div>
+        <div class="col-12 auth-enlaces"><button type="button" data-auth-vista="login">Ya tengo una cuenta</button></div>
+      </form>
+      <form id="formulario-nueva-clave" class="row g-3 formulario-auth d-none">
+        <div class="col-12"><p>Escribe la nueva contraseña para tu cuenta.</p><label class="form-label" for="nueva-clave">Nueva contraseña</label><input class="form-control" id="nueva-clave" type="password" minlength="8" required /></div>
+        <div class="col-12"><button class="btn btn-primary w-100" type="submit"><i class="fa-solid fa-key"></i> Actualizar contraseña</button></div>
       </form>
     </section>
 
@@ -56,6 +73,12 @@
     </section>
   </main>
 
+
+  <dialog class="dialogo-usuarios" id="dialogo-usuarios">
+    <div class="dialogo-cabecera"><div><span class="subtitulo-tarjeta">Seguridad</span><h2>Usuarios del constructor</h2></div><button class="boton-icono" id="cerrar-usuarios" type="button" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button></div>
+    <p>Aprueba únicamente personas que deban modificar el portafolio.</p>
+    <div id="lista-usuarios" class="lista-usuarios"></div>
+  </dialog>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="assets/js/datos/supabase-config.js"></script>
   <script src="assets/js/datos/portafolio-datos.js"></script>

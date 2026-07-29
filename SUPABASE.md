@@ -69,3 +69,12 @@ Esta actualización agrega:
 Después abre `admin.html`, pulsa **Usar datos actuales**, recorre los pasos y finaliza con **Generar y publicar todo**.
 
 Los cambios guardados como borrador no son visibles públicamente. Únicamente el botón final reemplaza la versión publicada.
+## Activar registro y recuperación de usuarios
+
+Ejecuta `supabase/upgrade-usuarios.sql` en **Supabase → SQL Editor**. Después verifica:
+
+1. **Authentication → Providers → Email**: Email debe estar habilitado y el registro de usuarios permitido.
+2. **Authentication → URL Configuration → Site URL**: `https://portafolio-wine-iota.vercel.app`
+3. Agrega `https://portafolio-wine-iota.vercel.app/**` a Redirect URLs.
+
+Las cuentas nuevas no obtienen acceso automáticamente. Aparecen en **Usuarios** dentro del constructor y un administrador existente debe aprobarlas.
