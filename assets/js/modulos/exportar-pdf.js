@@ -117,6 +117,40 @@
   const escaparAts = (valor = "") => String(valor).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
   const listaAts = items => `<ul>${(items || []).map(item => `<li>${escaparAts(item)}</li>`).join("")}</ul>`;
 
+  function crearDocumentoProfesional(datos) {
+    const p = datos.persona || {}, sobre = datos.sobreMi || {};
+    const resumen = (sobre.parrafos || []).slice(0,2).map(escaparAts).join(" ");
+    const experiencia = (datos.experiencia || []).map(item => `<article><div class="fila-titulo"><h3>${escaparAts(item.cargo)}</h3><span>${escaparAts(item.periodo)}</span></div><p class="meta"><strong>${escaparAts(item.empresa)}</strong> · ${escaparAts(item.ubicacion)}</p>${listaAts(item.funciones)}</article>`).join("");
+    const proyectos = (datos.proyectos || []).slice(0,3).map(item => `<article><div class="fila-titulo"><h3>${escaparAts(item.nombre)}</h3><span>${escaparAts(item.subtitulo)}</span></div><p>${escaparAts(item.descripcion)}</p>${item.tecnologias?.length ? `<p class="compacto"><strong>Tecnologías:</strong> ${item.tecnologias.map(escaparAts).join(", ")}</p>` : ""}</article>`).join("");
+    const educacion = (datos.educacion || []).map(item => `<article><div class="fila-titulo"><h3>${escaparAts(item.programa)}</h3><span>${escaparAts(item.periodo)}</span></div><p class="meta"><strong>${escaparAts(item.institucion)}</strong> · ${escaparAts(item.detalle)}</p></article>`).join("");
+    const tecnologias = (datos.tecnologias || []).map(grupo => `<p class="compacto"><strong>${escaparAts(grupo.categoria)}:</strong> ${(grupo.items || []).map(escaparAts).join(", ")}</p>`).join("");
+    const certificados = (datos.certificaciones || []).slice(0,6).map(item => `<li><strong>${escaparAts(item.nombre)}</strong> · ${escaparAts(item.entidad)}</li>`).join("");
+    const idiomas = (datos.idiomas || []).map(item => `<strong>${escaparAts(item.nombre)}:</strong> ${escaparAts(item.descripcion)}`).join(" · ");
+    const ubicacion = [p.ciudad,p.departamento,p.pais].filter(Boolean).map(escaparAts).join(", ");
+    return `<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Hoja de vida - ${escaparAts(p.nombre)}</title><style>
+      @page{size:A4;margin:12mm}*{box-sizing:border-box}html{background:#e9e9e9}body{width:210mm;min-height:297mm;margin:16px auto;padding:14mm 15mm;color:#111;background:#fff;font-family:Arial,Helvetica,sans-serif;font-size:9.4pt;line-height:1.28;box-shadow:0 4px 24px #999}header{position:relative;min-height:42mm;padding-right:46mm}.foto{position:absolute;right:0;top:0;width:39mm;height:39mm;border-radius:50%;object-fit:cover;background:#eee}h1{margin:0 0 2px;font-size:24pt;line-height:1;text-transform:uppercase}header h2{margin:0 0 8px;font-size:11pt;font-weight:500;text-transform:uppercase}.contacto{margin:2px 0;font-size:8.6pt}.resumen{max-width:132mm;margin-top:8px;text-align:justify}section{margin-top:11px}section>h2{margin:0 0 6px;padding-bottom:2px;border-bottom:1.5px solid #111;font-size:11.5pt;text-transform:uppercase}article{margin:0 0 7px;break-inside:avoid;page-break-inside:avoid}.fila-titulo{display:flex;justify-content:space-between;gap:12px;align-items:baseline}.fila-titulo h3{margin:0;font-size:9.8pt}.fila-titulo span{flex:0 0 auto;color:#555;font-size:8.2pt}.meta,.compacto,p{margin:2px 0}.meta{color:#333}ul{margin:3px 0 5px;padding-left:17px}li{margin-bottom:1px}.dos-columnas{display:grid;grid-template-columns:1.2fr .8fr;gap:10mm;align-items:start}.acciones{position:fixed;right:18px;top:18px;display:flex;gap:8px}.acciones button{padding:9px 14px;border:0;border-radius:7px;color:#fff;background:#111;cursor:pointer}@media print{html{background:#fff}body{width:auto;min-height:0;margin:0;padding:0;box-shadow:none}.acciones{display:none}}@media(max-width:800px){body{width:100%;min-height:100vh;margin:0;padding:24px}.dos-columnas{grid-template-columns:1fr}header{padding-right:0}.foto{position:static;float:right;margin-left:15px}}
+    </style></head><body><div class="acciones"><button onclick="window.print()">Imprimir / Guardar PDF</button></div><header>${p.foto ? `<img class="foto" src="${escaparAts(p.foto)}" alt="Fotografía de ${escaparAts(p.nombre)}">` : ""}<h1>${escaparAts(p.nombre)}</h1><h2>${escaparAts(p.cargoPrincipal)}</h2><p class="contacto">${escaparAts(p.telefonoVisible)} · ${escaparAts(p.correo)}</p><p class="contacto">${ubicacion}${p.linkedin ? ` · ${escaparAts(p.linkedin)}` : ""}</p><p class="resumen">${resumen}</p></header><main>
+      ${experiencia ? `<section><h2>Experiencia profesional</h2>${experiencia}</section>` : ""}
+      ${proyectos ? `<section><h2>Proyectos destacados</h2>${proyectos}</section>` : ""}
+      ${educacion ? `<section><h2>Formación</h2>${educacion}</section>` : ""}
+      <div class="dos-columnas"><div>${tecnologias ? `<section><h2>Competencias técnicas</h2>${tecnologias}</section>` : ""}${datos.habilidades?.length ? `<section><h2>Habilidades</h2><p>${datos.habilidades.map(escaparAts).join(", ")}</p></section>` : ""}</div><div>${idiomas ? `<section><h2>Idiomas</h2><p>${idiomas}</p></section>` : ""}${certificados ? `<section><h2>Certificaciones</h2><ul>${certificados}</ul></section>` : ""}</div></div>
+    </main></body></html>`;
+  }
+
+  function abrirDocumento(documento) {
+    const ventana = window.open("","_blank");
+    if (!ventana) { alert("Permite las ventanas emergentes para abrir la hoja de vida."); return null; }
+    ventana.opener = null;
+    ventana.document.open();
+    ventana.document.write(documento);
+    ventana.document.close();
+    return ventana;
+  }
+
+  function abrirVersionProfesional() {
+    abrirDocumento(crearDocumentoProfesional(window.PORTAFOLIO_DATOS || {}));
+  }
+
   function crearDocumentoAts(datos) {
     const p = datos.persona || {}, sobre = datos.sobreMi || {};
     const tecnologias = (datos.tecnologias || []).flatMap(grupo => grupo.items || []);
@@ -139,18 +173,13 @@
   }
 
   function abrirVersionAts() {
-    const ventana = window.open("","_blank");
-    if (!ventana) return alert("Permite las ventanas emergentes para abrir la versión ATS.");
-    ventana.opener = null;
-    ventana.document.open();
-    ventana.document.write(crearDocumentoAts(window.PORTAFOLIO_DATOS || {}));
-    ventana.document.close();
+    abrirDocumento(crearDocumentoAts(window.PORTAFOLIO_DATOS || {}));
   }
 
   function iniciar() {
-    document.querySelectorAll("[data-descargar-cv]").forEach(boton => boton.addEventListener("click", descargarPdf));
+    document.querySelectorAll("[data-descargar-cv]").forEach(boton => boton.addEventListener("click", abrirVersionProfesional));
     document.querySelector("#boton-imprimir")?.addEventListener("click", abrirVersionAts);
   }
 
-  window.PortafolioPdf = { iniciar, descargarPdf, abrirVersionAts };
+  window.PortafolioPdf = { iniciar, descargarPdf, abrirVersionProfesional, abrirVersionAts, crearDocumentoProfesional, crearDocumentoAts };
 })();
